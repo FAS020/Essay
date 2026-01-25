@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Essay</title>
+    <style>
+        @font-face {
+            font-family: 'Avenir';
+            src: url('Avenir.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'AvenirNext-Bold';
+            src: url('AvenirNext-Bold.ttf') format('truetype');
+        }
+
+        /* Stijl voor alle scrollbars (zwarte streep) */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: black;
+        }
+
+        body {
+            font-family: 'Avenir', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: black transparent;
+        }
+
+        /* Kleurmodi */
+        body.mode-grey,
+        body.mode-grey .inhoud,
+        body.mode-grey .tekst,
+        body.mode-grey .afbeeldingen {
+            background-color: #eeeeee;
+        }
+
+        body.mode-black,
+        body.mode-black .inhoud,
+        body.mode-black .tekst,
+        body.mode-black .afbeeldingen {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        body.mode-black a { color: #ffffff !important; }
+        body.mode-black .stijl-citaat { color: #ddd; border-left-color: #ddd; }
+        body.mode-black .stijl-bijschrift, 
+        body.mode-black .stijl-voetnoot { color: #bbb; }
+
+        body.mode-black .mode-btn {
+            border-color: white;
+            color: white;
+        }
+        body.mode-black .mode-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        body.mode-black::-webkit-scrollbar-thumb {
+            background-color: white;
+        }
+        body.mode-black {
+            scrollbar-color: white transparent;
+        }
+
+        h1, h2, h3, h4, h5, h6, strong {
+            font-weight: normal;
+        }
+
+        .essay-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr; 
+            gap: 20px;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .kolom {
+            padding: 20px;
+            border-radius: 20px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .inhoud {
+            background-color: #ffffff;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .tekst {
+            background-color: #ffffff;
+            font-size: 1.1em;
+            line-height: 1.6;
+            overflow-y: auto;
+        }
+
+        .stijl-citaat {
+            font-family: 'Avenir', sans-serif;
+            font-style: italic;
+            font-size: 1.1em;
+            border-left: 3px solid #333;
+            padding-left: 10px;
+            color: #444;
+            margin: 10px 0;
+        }
+
+        .afbeeldingen {
+            background-color: white;
+            border: 1px solid black;
+            overflow-y: auto;
+        }
+
+        .chapter-images img, 
+        .chapter-images > div > div:first-child {
+            border-radius: 15px;
+        }
+
+        .hoofdstuk {
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            min-height: 90vh;
+        }
+
+        .sidebar-bottom {
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        .colofon {
+            font-size: 0.7em;
+            margin-top: 15px;
+        }
+
+        .stijl-bijschrift {
+            font-family: 'Avenir', sans-serif;
+            font-size: 0.8em;
+            color: #666;
+            font-style: normal;
+            margin-top: 5px;
+        }
+
+        .stijl-voetnoot {
+            font-family: 'Avenir', sans-serif;
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 5px;
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+        .stijl-voetnoot .ref-icon {
+            flex-shrink: 0;
+            margin: 0;
+        }
+
+        .mode-btn {
+            cursor: pointer;
+            padding: 8px 15px;
+            border: 1px solid black;
+            background-color: transparent;
+            font-family: inherit;
+            font-size: 0.7em;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+        .mode-btn:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .ref-icon {
+            font-weight: bold;
+            color: #555;
+            font-size: 0.75em;
+            vertical-align: super;
+            margin: 0 1px;
+        }
+        body.mode-black .ref-icon { color: #aaa; }
+
+        .verborgen {
+            display: none;
+        }
+
+        /* Pijltjes voor mobiel */
+        .mobile-nav-arrow {
+            display: none;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 1.5em;
+            user-select: none;
+        }
+        .arrow-left { left: 10px; }
+        .arrow-right { right: 10px; }
+
+        body.mode-black .mobile-nav-arrow {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .essay-container {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+            }
+            .kolom {
+                min-width: 85vw;
+                scroll-snap-align: center;
+            }
+            .mobile-nav-arrow {
+                display: flex; /* Alleen tonen op mobiel */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-nav-arrow arrow-left" onclick="scrollMobile('left')">&larr;</div>
+    <div class="mobile-nav-arrow arrow-right" onclick="scrollMobile('right')">&rarr;</div>
+
+    <div class="essay-container">
+        
+        <aside class="kolom inhoud">
+            <div>
+                <h2>Inhoud</h2>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li><a href="#" onclick="toonHoofdstuk('titel'); return false;" style="text-decoration: none; color: #333;">Titel</a></li>
+                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('intro'); return false;" style="text-decoration: none; color: #333;">Intro</a></li>
+                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('h1'); return false;" style="text-decoration: none; color: #333;">1. Een zes is ook voldoende</a></li>
+                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('h2'); return false;" style="text-decoration: none; color: #333;">2. Verlossing</a></li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: auto; margin-bottom: 10px;">
+                <button onclick="toggleMode()" class="mode-btn">Kleurmodus</button>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="colofon">
+                    <p>Colofon<br>
+                        Gemaakt door: [Jouw Naam]
+                        <br>Datum: [Datum]
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Kolom 2: Het Essay -->
+        <main class="kolom tekst">
+            <!-- Container voor de echte inhoud -->
+            <div>
+                <section id="titel" class="hoofdstuk">
+                    <h1>Titel van het Essay</h1>
+                </section>
+
+                <section id="intro" class="hoofdstuk">
+                    <h2>Intro</h2>
+                    <p>Dit essay dient als een manifest voor mijn afstudeer project 2026. Er wordt in gegaan op mijn persoonlijke ervaring in het (grafische) onderwijs en de motieven waardoor ik de verlangens heb die in deze tekst worden benoemd.</p>
+                </section>
+                
+                <section id="h1" class="hoofdstuk">
+                    <h2>Een zes is ook voldoende</h2>
+                    <p>Mijn grafische leerweg begon al op het vmbo-b niveau, de middelbare school. Wanneer je speciaal onderwijs buitensluit is vmbo-b het laagste leerniveau dat iemand kan krijgen, dit is ook niet heel gek want op de basisschool kregen mijn ouders en ik ieder jaar te horen dat er niet veel van mij terecht zou komen; dat ‘ze blij moesten zijn als ik met m’n 16e een baantje zou hebben. In de klas was ik voornamelijk alleen maar tekeningen aan het maken die vervolgens verscheurd werden door de juf voor de klas.</p>
+                    
+                    <p>De vmbo basis beroeps opleidingen zijn bedoeld om de leerlingen voor te bereiden op het mbo<span class="ref-icon">[1]</span>. Naar mijn eigen ervaring wordt er gewoon een klas leerweg ondersteuning volgepropt met halve zolen ‘mensen die niet kunnen leren’ waardoor je leerniveau alleen maar kan kelderen. Docenten werden weggepest of betrapt op het betasten van meisjes, onze vervanger was een alcoholist. Medestudenten deden de meest verschrikkelijke, gewelddadigste dingen bij elkaar; ‘safe to say’ dat ik blij was toen ik door kon naar mbo2.</p>
+
+                    <p>Zoals elke ‘sad & mad whiteboy’ stereotype wordt ik rond mijn 16e verliefd op Punk-Rock en Grunnge. Dit heeft er toe geleid dat ik een eigen band vorm waar ik inmiddels al een aantal jaar mee optreed en nog steeds actief is. Muziek heeft veel bijdragen geleverd aan mijn manier van ontwerpen, provocatie en expressie is sinds ik mijn gitaar had ontdekt onmisbaar voor mij. ‘Montage of Heck’ is een documentatie van het werk van Kurt Cobain<span class="ref-icon">[video]</span><span class="ref-icon">[link]</span>. Een kijk in zijn persoonlijke archief voelt nu dat ik er als volwassen man op terug kijk als privacyschending, maar als puber heeft deze film er voor gezorgd om de vervreemding dat mijn leerniveau en mijn makerschap met zich mee bracht te omarmen. ‘Montage of Heck’ heeft mij doen aansporen om zowel muziek opnames als fysiek werk te archiveren, materialen te verzamelen en te kijken naar mijn omgeving; deze aangeleerde werkwijze doet mij ook verbinden aan de werkwijze van Karel Martens vaarvan wij in jaar 4 HKU Graphic Design de tentoonstelling Unbound in het stedelijk museum bezoeken.<span class="ref-icon">[video]</span><span class="ref-icon">[link]</span></p>
+
+                    <div class="stijl-citaat">‘Sad & mad whiteboy stereotype’</div>
+
+                    <p>Ondanks afgeraden door mijn mentor te zijn om me aan te melden op leerniveau 4 ben ik aangenomen aan de opleiding Media Vormgever op het Media College Amsterdam. Dit is de eerste opleiding geweest waar ik het oprecht naar mijn zin had, hiervoor zal je hebben gemerkt; heb ik altijd een afkeer tegen ‘school’ gehad.<span class="ref-icon">[mp3]</span> Je zou maar durven het systeem waar jij niet voor bent uitgesneden te bevragen, maar als ik daar nu op terug kijk; deed ik dat altijd al.</p>
+
+                    <p>Het laatste jaar mbo 4 had ik de keuze gemaakt om af te studeren op de richting conceptueel ontwerp, en tot mijn verbazing kwam het tekenen, archiveren en provoceren waarop ik altijd was bekritiseerd ineens van pas. Niet alle studenten ervaarde dit jaar als een kans om te ontplooien, de meerderheid voelde zich in de maling genomen dat dat wat ze de afgelopen 3 jaar hebben geleerd nu ineens ‘niet goed meer is’. Dit is het jaar waarvan ik wist dat dit is wat ik wil doen, maar ook wanneer ik voor het eerst ben gaan terug kijken en kritiek ben gaan leveren op mijn leerweg.</p>
+
+                    <p>De kunst academie is de broedplaats die in mijn voorgaande onderwijs en omgeving ontbrak. Een plek waar ontzettend veel verschillende makers en werkplaatsen zijn. Ruimte voor experiment, toeval, het uitbreiden van skills, verdieping in technieken, alles wat een jonge maker nodig heeft om zicht te kunnen ontwikkelen. Dit is waar ik altijd op heb zitten wachten, waar ik het idee heb dat ik mezelf kan zijn. Tijdens de eerste twee jaar aan de academie merk ik pas echt wat ik al die tijd heb gemist, en waarom dit zo is? Waarom zou een praktisch ingestelde opleiding niet met analoge technieken werken? Puur alleen omdat de norm van productie nu digitaal is?</p>
+                </section>
+
+                <section id="h2" class="hoofdstuk">
+                    <h2>Verlossing</h2>
+                    <p>Het is pas sinds kort dat ik het verschil tussen een grafisch vormgever en een grafisch ontwerper inzie. Voorheen dacht ik altijd dat het puur een status/niveau ding is, hoeveel geld je gaat verdienen, maar dat is niet zo. Een vormgever is iemand die produceert en een ontwerper… daar zijn de meningen over verdeeld, maar voor mij is een ontwerper iemand die reageert. Een mbo’er leert om een resultaat te behalen en ziet zijn werkproces als een checklist<span class="ref-icon">[2]</span>. Ik kan mij nog herinneren dat wanneer wij op het mbo bijvoorbeeld een poster moesten maken waarvan er op de briefing ook verplicht 5 schetsen stonden, dat iedereen binnen een uurtje een digitale poster had gemaakt en achteraf 5 adaptaties hadden geschetst.</p>
+                    
+                    <p>Deze leerhouding is iets waar ik mij tijdens mijn stage bij de GWA (Grafische Werkplaats Amsterdam) veel mee bezig heb gehouden met als doel om een analoge workshop voor te bereiden en te geven aan mijn oude opleiding. Bij de GWA heb ik ook veel over mijzelf geleerd, bijvoorbeeld hoe belangrijk het is om in een analoge werkplaats bezig te zijn en dat als je verdieping in deze technieken zoekt je bijna verplicht bent om dit fulltime te doen (aldus een stage van 6 maanden). Het gaat door me heen dat ik de afgelopen 3 jaar misschien de werkplaatsen aan de HKU voorlief heb genomen, dat ik ze enkel voor opdrachten en uitwerkingen heb bezocht en niet voor experiment. Daarnaast ontbreekt er voor mij een community naast mijn studie, een groep zoals de GWA, een werkplaats buiten de academie om, een thuis. Ook nu tijdens mijn afstuderen kan ik niet anders dan wederom terug kijken op mijn leerweg en waar ik zelf verandering in zou willen zien.</p>
+                </section>
+            </div>
+        </main>
+
+        <aside class="kolom afbeeldingen">
+            <div>                
+                <div id="img-titel" class="chapter-images">
+                    <div style="margin-bottom: 30px;">
+                        <div style="background-color: #ddd; height: 150px; width: 100%; display: flex; align-items: center; justify-content: center;">Titel</div>
+                        <p class="stijl-bijschrift">Afbeelding omschrijving</p>
+                    </div>
+                </div>
+                
+                <div id="img-intro" class="chapter-images verborgen">
+                    <div style="margin-bottom: 30px;">
+                        <div style="background-color: #ddd; height: 150px; width: 100%; display: flex; align-items: center; justify-content: center;">Intro</div>
+                        <p class="stijl-bijschrift">Afbeelding omschrijving:</p>
+                    </div>
+                </div>
+                
+                <!-- Afbeeldingen voor Hoofdstuk 1 -->
+                <div id="img-h1" class="chapter-images verborgen">
+                    <div style="margin-bottom: 30px;">
+                        <div style="background-color: #ddd; height: 150px; width: 100%; display: flex; align-items: center; justify-content: center;">H1 Afbeelding</div>
+                        <p class="stijl-bijschrift"><span class="ref-icon">[˚○]</span> Afbeelding omschrijving</p>
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <div style="background-color: #eee; height: 100px; width: 100%; display: flex; align-items: center; justify-content: center;">Video</div>
+                        <p class="stijl-bijschrift"><span class="ref-icon">[⟥]</span> Video omschrijving</p>
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <audio controls style="width: 100%; margin-bottom: 5px;">
+                            <source src="jouw-audio-bestand.mp3" type="audio/mpeg">
+                            Je browser ondersteunt het audio-element niet.
+                        </audio>
+                        <p class="stijl-bijschrift"><span class="ref-icon">[♫]</span> Audio omschrijving</p>
+                    </div>
+                    <p class="stijl-voetnoot"><span class="ref-icon">[1]</span><span>Voetnoot omschrijving<br> Voetnoot sub-omschrijving</span></p>
+                    <p class="stijl-voetnoot" style="padding-top: 15px;"><span class="ref-icon">[⩆]</span><a href="#" target="_blank" class="mode-btn" style="text-decoration: none; color: inherit;">Link omschrijving</a></p>
+                </div>
+
+                <!-- Afbeeldingen voor Hoofdstuk 2 -->
+                <div id="img-h2" class="chapter-images verborgen">
+                    <div style="margin-bottom: 30px;">
+                        <div style="background-color: #bbb; height: 150px; width: 100%; display: flex; align-items: center; justify-content: center;">H2</div>
+                        <p class="stijl-bijschrift">Afbeelding omschrijving:</p>
+                    </div>
+                    <p class="stijl-voetnoot"><span class="ref-icon">[3]</span> Voetnoot: Link naar artikel</p>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        var currentMode = 0; // 0=wit, 1=grijs, 2=zwart
+        function toggleMode() {
+            currentMode = (currentMode + 1) % 3;
+            document.body.classList.remove('mode-grey', 'mode-black');
+            
+            if (currentMode === 1) {
+                document.body.classList.add('mode-grey');
+            } else if (currentMode === 2) {
+                document.body.classList.add('mode-black');
+            }
+        }
+
+        var isManualScroll = false;
+
+        function toonHoofdstuk(id) {
+            isManualScroll = true;
+
+            // Update afbeeldingen en voetnoten direct
+            document.querySelectorAll('.chapter-images').forEach(function(div) {
+                div.classList.add('verborgen');
+            });
+            var imgDiv = document.getElementById('img-' + id);
+            if (imgDiv) {
+                imgDiv.classList.remove('verborgen');
+            }
+
+            // Scroll naar het gekozen hoofdstuk
+            var element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Heractiveer observer na scroll (ongeveer 1 seconde)
+            setTimeout(function() { isManualScroll = false; }, 1000);
+        }
+
+        // Scroll Detectie (Observer)
+        document.addEventListener('DOMContentLoaded', function() {
+            const visibleSections = new Map();
+
+            var observer = new IntersectionObserver(function(entries) {
+                if (isManualScroll) return;
+
+                // Update de lijst van zichtbare secties
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        visibleSections.set(entry.target, true);
+                    } else {
+                        visibleSections.delete(entry.target);
+                    }
+                });
+
+                // Bepaal welke sectie het meest relevant is (dichtst bij de focus-strip)
+                let topSection = null;
+                let maxTop = -Infinity;
+
+                visibleSections.forEach((_, section) => {
+                    // Haal de actuele positie op
+                    const top = section.getBoundingClientRect().top;
+                    // Kies de sectie die het laagst staat (dus net binnenkomt of bovenaan staat) binnen de detectiezone
+                    if (top > maxTop) {
+                        maxTop = top;
+                        topSection = section;
+                    }
+                });
+
+                // Toon de afbeeldingen voor de bovenste sectie
+                if (topSection) {
+                    document.querySelectorAll('.chapter-images').forEach(div => div.classList.add('verborgen'));
+                    const imgDiv = document.getElementById('img-' + topSection.id);
+                    if (imgDiv) {
+                        imgDiv.classList.remove('verborgen');
+                    }
+                }
+            }, { 
+                root: document.querySelector('.tekst'), 
+                threshold: 0,
+                rootMargin: '-10% 0px -60% 0px' // Detecteer in een strook op 10-40% van de bovenkant
+            });
+
+            // Observeer alle hoofdstukken
+            document.querySelectorAll('.hoofdstuk').forEach(function(sectie) {
+                observer.observe(sectie);
+            });
+
+            // Pijltjes logica voor mobiel
+            var container = document.querySelector('.essay-container');
+            container.addEventListener('scroll', updateArrows);
+            window.addEventListener('resize', updateArrows);
+            updateArrows(); // Direct checken bij laden
+        });
+
+        function scrollMobile(direction) {
+            var container = document.querySelector('.essay-container');
+            var scrollAmount = container.clientWidth;
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        function updateArrows() {
+            var container = document.querySelector('.essay-container');
+            var leftArrow = document.querySelector('.arrow-left');
+            var rightArrow = document.querySelector('.arrow-right');
+
+            if (window.innerWidth > 768) {
+                leftArrow.style.display = ''; // Reset inline style voor desktop
+                rightArrow.style.display = '';
+                return;
+            }
+
+            // Links verbergen als we aan het begin zijn
+            leftArrow.style.display = (container.scrollLeft <= 10) ? 'none' : 'flex';
+            
+            // Rechts verbergen als we aan het einde zijn
+            var maxScroll = container.scrollWidth - container.clientWidth;
+            rightArrow.style.display = (Math.ceil(container.scrollLeft) >= maxScroll - 10) ? 'none' : 'flex';
+        }
+    </script>
+
+</body>
+</html>
