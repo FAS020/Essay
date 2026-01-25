@@ -1,3 +1,0 @@
-Toelichting
-
-Alle tekst is geschreven door Franco Soolsma, het ontwerp van de essay is geïnspireerd door de ontwerpsystemen die Heerko van der Kooij maakt voor de digitale publicaties van Hackers & Designers. De ontwerpkeuzes zijn gemaakt door Franco Soolsma, de functionaliteiten en structuur van de html/css code is gegenereerd door Gemini code assistant in Microsoft Visual Studio Code.
