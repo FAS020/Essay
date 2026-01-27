@@ -662,6 +662,10 @@
             // Stop alle media bij wisselen hoofdstuk
             pauseAllMedia();
 
+            // Scroll media kolom naar boven
+            var mediaKolom = document.querySelector('.afbeeldingen');
+            if (mediaKolom) mediaKolom.scrollTop = 0;
+
             // Update afbeeldingen en voetnoten direct
             document.querySelectorAll('.chapter-images').forEach(function(div) {
                 div.classList.add('verborgen');
@@ -718,6 +722,10 @@
                     
                     // Stop media van vorige sectie
                     pauseAllMedia();
+
+                    // Scroll media kolom naar boven
+                    var mediaKolom = document.querySelector('.afbeeldingen');
+                    if (mediaKolom) mediaKolom.scrollTop = 0;
 
                     document.querySelectorAll('.chapter-images').forEach(div => div.classList.add('verborgen'));
                     const imgDiv = document.getElementById('img-' + topSection.id);
@@ -835,6 +843,10 @@
                 // Functionaliteit
                 playBtn.addEventListener('click', function() {
                     if (media.paused) {
+                        // Pauzeer andere media
+                        document.querySelectorAll('video, audio').forEach(function(m) {
+                            if (m !== media) m.pause();
+                        });
                         media.play();
                     } else {
                         media.pause();
