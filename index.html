@@ -376,6 +376,11 @@
             color: white;
         }
 
+        .active-link {
+            text-decoration: underline !important;
+            text-underline-offset: 4px;
+        }
+
         @media (max-width: 768px) {
             .essay-container {
                 display: flex;
@@ -392,7 +397,7 @@
         }
     </style>
 </head>
-<body>
+<body class="mode-black">
 
     <div class="mobile-nav-arrow arrow-left" onclick="scrollMobile('left')">&larr;</div>
     <div class="mobile-nav-arrow arrow-right" onclick="scrollMobile('right')">&rarr;</div>
@@ -403,13 +408,13 @@
             <div>
                 <h2>Inhoud</h2>
                 <ul style="list-style: none; padding-left: 0;">
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('intro'); return false;" style="text-decoration: none; color: #333;">Intro</a></li>
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('h1'); return false;" style="text-decoration: none; color: #333;">Een zes is ook voldoende</a></li>
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('h2'); return false;" style="text-decoration: none; color: #333;">Onvoorwaardelijke liefde</a></li>
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('h3'); return false;" style="text-decoration: none; color: #333;">Verlossing</a></li>
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('h4'); return false;" style="text-decoration: none; color: #333;">Common Ground</a></li>
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('conclusie'); return false;" style="text-decoration: none; color: #333;">Conclusie</a></li>
-                    <li style="margin-top: 10px;"><a href="#" onclick="toonHoofdstuk('toelichting'); return false;" style="text-decoration: none; color: #333;">Toelichting</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-intro" href="#" onclick="toonHoofdstuk('intro'); return false;" style="text-decoration: none; color: #333;">Intro</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-h1" href="#" onclick="toonHoofdstuk('h1'); return false;" style="text-decoration: none; color: #333;">Een zes is ook voldoende</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-h2" href="#" onclick="toonHoofdstuk('h2'); return false;" style="text-decoration: none; color: #333;">Onvoorwaardelijke liefde</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-h3" href="#" onclick="toonHoofdstuk('h3'); return false;" style="text-decoration: none; color: #333;">Verlossing</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-h4" href="#" onclick="toonHoofdstuk('h4'); return false;" style="text-decoration: none; color: #333;">Common Ground</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-conclusie" href="#" onclick="toonHoofdstuk('conclusie'); return false;" style="text-decoration: none; color: #333;">Conclusie</a></li>
+                    <li style="margin-top: 10px;"><a id="nav-toelichting" href="#" onclick="toonHoofdstuk('toelichting'); return false;" style="text-decoration: none; color: #333;">Toelichting</a></li>
                 </ul>
             </div>
             
@@ -461,6 +466,11 @@
                     <p>In John Carpenter’s ‘They Live’ zijn alle elitaire machthebbers, aliens; ze putten de aarde als een 3e wereldland uit voor haar grondstoffen en onderdrukken de samenleving. De midden en lage klassen worden door subliminale zendingen in hypnose gebracht (sleep), gemanipuleerd te consumeren en een materialistisch leven te verlangen. Hoewel de film voor veel verschillende thema’s symbool kan staan, is de ‘Obey’ scene voor mij persoonlijke het verschil tussen een vormgever en een ontwerper, een verschil dat mij lange tijd onopgemerkt is gebleven. <span class="ref-link" onclick="scrollToRef('ref-h2-img1')">[⟥]</span><span class="ref-link" onclick="scrollToRef('ref-h2-link1')">[⩆]</span></p>
 
                     <p>Nieuwsgierigheid, in staat zijn om te provoceren en reageren zijn eigenschappen die niet aangeleerd worden op een onderwijsinstelling maar enkel aangemoedigd kunnen worden, iets wat het mbo (en zeker het vmbo) niet doet. Een vormgever zou ik omschrijven als iemand die produceert, gericht op het eindresultaat en dit zo efficiënt mogelijk bereiken; geen werkproces, experiment of nieuwsgierigheid maar een checklist. <span class="ref-link" onclick="scrollToRef('ref-h2-2')">[2]</span> Een ‘slaaf’ aan een systeem dat niet meer functioneert, niet los kunnen breken uit een template dat bepaald is door een ander; ‘They live, we sleep’.</p>
+
+                    <div style="margin: 20px 0;">
+                        <div style="font-size: 1.5em; line-height: 1.3;">‘People who don’t work with their hands are parasites’</div>
+                        <div style="font-size: 0.9em; margin-top: 5px;">Jenny Holzer <span class="ref-link" onclick="scrollToRef('ref-h2-jenny-link1')">[⩆]</span><span class="ref-link" onclick="scrollToRef('ref-h2-jenny-video')">[⟥]</span><span class="ref-link" onclick="scrollToRef('ref-h2-jenny-link2')">[⩆]</span></div>
+                    </div>
 
                     <p>De beperkingen van een zelfverkozen eenling dringen tot mij door wanneer ik in 2025 in aanraking kom met de Grafische Werkplaats Amsterdam. Door altijd individueel maken, binnen educatieve instellingen horen dat je medestudenten concurrenten zijn; is het idee of verlangen van een community aan mij voorbijgegaan. Een inclusieve werkplaats die niet productiegericht is maar bestaat voor experiment, het koesteren van de analoge ambacht en het overdragen van kennis. Het is niet vanzelfsprekend dat zulke werkplaatsen bestaan, bij de GWA wordt het grafische analoge ambacht in leven gehouden en de technieken bewaakt; dit verijst een onvoorwaardelijke liefde om verdwijning tegen te gaan. <span class="ref-link" onclick="scrollToRef('ref-h2-img2')">[˚○]</span></p>
 
@@ -594,6 +604,16 @@
                     
                     <p id="ref-h2-2" class="stijl-voetnoot"><span class="ref-icon">[2]</span><span>Design Like You Give A Damn<br> Eva van der Hoek<br>A Talk With Mischa Appel<br><br>EH: Do you think a pre-education or basic education, such as an MBO, is almost crucial for a bachelor of graphic design?<br><br>MA: I do think it can be a good addition. But it’s not about the developed skills, it’s about the mentality of studying at an art school. So, if you learn to explore, make a process, and experiment, that is much more valuable than being able to express yourself with a certain tool or technique. And that’s exactly what you don’t learn in an MBO, then you learn to get to the finish line.</span></p>
 
+                    <p id="ref-h2-jenny-link1" class="stijl-voetnoot"><span class="ref-icon">[⩆]</span><a href="https://genius.com/Jenny-holzer-truisms-annotated" target="_blank" class="mode-btn" style="text-decoration: none; color: inherit;">Jenny Holzer – Truisms | Genius</a></p>
+                    <div id="ref-h2-jenny-video" class="media-item">
+                        <video controls style="width: 100%; height: auto;">
+                            <source src="links/beeld/jenny.mp4" type="video/mp4">
+                            Je browser ondersteunt de video tag niet.
+                        </video>
+                        <p class="stijl-bijschrift"><span class="ref-icon">[⟥]</span> From The Archive: Jenny Holzer<br>Artforum<br>Youtube</p>
+                    </div>
+                    <p id="ref-h2-jenny-link2" class="stijl-voetnoot"><span class="ref-icon">[⩆]</span><a href="https://www.youtube.com/watch?v=nY49Oy9By7A" target="_blank" class="mode-btn" style="text-decoration: none; color: inherit;">From The Archive: Jenny Holzer</a></p>
+
                     <div id="ref-h2-img2" class="media-item">
                         <img src="links/beeld/gwa.png" style="width: 100%; height: auto;" alt="GWA Workshop">
                         <p class="stijl-bijschrift"><span class="ref-icon">[˚○]</span>Workshop ‘Step Away From The Computer’<br><br>Grafische Werkplaats Amsterdam</p>
@@ -651,7 +671,7 @@
     </div>
 
     <script>
-        var currentMode = 0; // 0=wit, 1=grijs, 2=zwart
+        var currentMode = 2; // 0=wit, 1=grijs, 2=zwart
         function toggleMode() {
             currentMode = (currentMode + 1) % 3;
             document.body.classList.remove('mode-grey', 'mode-black');
@@ -689,6 +709,8 @@
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+            
+            updateNavigation(id);
 
             // Heractiveer observer na scroll (ongeveer 1 seconde)
             setTimeout(function() { isManualScroll = false; }, 1000);
@@ -741,6 +763,7 @@
                     if (imgDiv) {
                         imgDiv.classList.remove('verborgen');
                     }
+                    updateNavigation(topSection.id);
                 }
             }, { 
                 root: document.querySelector('.tekst'), 
@@ -788,6 +811,16 @@
             // Rechts verbergen als we aan het einde zijn
             var maxScroll = container.scrollWidth - container.clientWidth;
             rightArrow.style.display = (Math.ceil(container.scrollLeft) >= maxScroll - 10) ? 'none' : 'flex';
+        }
+
+        function updateNavigation(id) {
+            document.querySelectorAll('.inhoud a').forEach(function(a) {
+                a.classList.remove('active-link');
+            });
+            var activeLink = document.getElementById('nav-' + id);
+            if (activeLink) {
+                activeLink.classList.add('active-link');
+            }
         }
 
         function scrollToRef(id) {
