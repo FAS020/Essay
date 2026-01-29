@@ -160,6 +160,7 @@
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
             min-height: 90vh;
+            scroll-margin-top: 40px;
         }
 
         .sidebar-bottom {
@@ -688,6 +689,7 @@
         }
 
         var isManualScroll = false;
+        var activeSectionId = null;
 
         function toonHoofdstuk(id) {
             isManualScroll = true;
@@ -715,6 +717,7 @@
             }
             
             updateNavigation(id);
+            activeSectionId = id;
 
             // Heractiveer observer na scroll (ongeveer 1 seconde)
             setTimeout(function() { isManualScroll = false; }, 1000);
@@ -723,11 +726,8 @@
         // Scroll Detectie (Observer)
         document.addEventListener('DOMContentLoaded', function() {
             const visibleSections = new Map();
-            let activeSectionId = null;
 
             var observer = new IntersectionObserver(function(entries) {
-                if (isManualScroll) return;
-
                 // Update de lijst van zichtbare secties
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
@@ -736,6 +736,8 @@
                         visibleSections.delete(entry.target);
                     }
                 });
+
+                if (isManualScroll) return;
 
                 // Bepaal welke sectie het meest relevant is (dichtst bij de focus-strip)
                 let topSection = null;
@@ -772,7 +774,7 @@
             }, { 
                 root: document.querySelector('.tekst'), 
                 threshold: 0,
-                rootMargin: '-10% 0px -60% 0px' // Detecteer in een strook op 10-40% van de bovenkant
+                rootMargin: '-10% 0px -80% 0px' // Detecteer in een strook op 10-20% van de bovenkant
             });
 
             // Observeer alle hoofdstukken
